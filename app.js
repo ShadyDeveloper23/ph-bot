@@ -14,9 +14,13 @@ app.use(
 
 bot.on('channel_post', async (ctx) => {
   const text = ctx.channelPost.text;
-  if (!text.match(/(?<=[\s,.:;"']|^)[]ут[и,і]н/g)) return
+  if (!text.match(/(?<=[\s,.:;"']|^)[пП]ут[и,і]н)/gm)) {
+    console.log('there is no match')
+    return
 
-  const editedText = text.replace(/Пут[и,і]н/gi, function (match) {
+  } 
+
+  const editedText = text.replace(/(?<=[\s,.:;"']|^)[пП]ут[и,і]н)/gm, function (match) {
     const firstLetter = match[0] === 'П' ? 'Х' : 'х';
     const rest = match.slice(2);
     return `${firstLetter}ую${rest}`;
