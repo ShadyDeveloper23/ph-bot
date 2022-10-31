@@ -13,28 +13,28 @@ app.use(
 );
 
 bot.on('channel_post', async (ctx) => {
+  
   const text = ctx.channelPost.text;
-  if (!text.match(/(?<=[\s,.:;"']|^)[пП]ут[и,і]н/gm)) {
-    console.log('there is no match')
+  const regExp = /(?<=[\s,.:;"']|^)п\s*у\s*т\s*[иі]\s*н/gmi
+  const matches = text.match(regExp)
+
+  if (!matches) {
     return
+  }
 
-  } 
+  const editedText = replaceAll(regExp, match => {
+    const newMatch = match.replaceAll(/\s/gmi, "")
+    return "Хую" + newMatch.slice(2).toLowerCase()
+  })
+    await ctx.telegram.editMessageText(
+      ctx.channelPost.chat.id,
+      ctx.channelPost.message_id,
+      undefined,
+      editedText
+    );
 
-  const editedText = text.replace(/(?<=[\s,.:;"']|^)[пП]ут[и,і]н/gm, function (match) {
-    const firstLetter = match[0] === 'П' ? 'Х' : 'х';
-    const rest = match.slice(2);
-    return `${firstLetter}ую${rest}`;
   });
 
-  await ctx.telegram.editMessageText(
-    ctx.channelPost.chat.id,
-    ctx.channelPost.message_id,
-    undefined,
-    editedText
-  );
+  const PORT = process.env.port || 9630
 
-});
-
-const PORT = process.env.port || 9630
-
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+  app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
