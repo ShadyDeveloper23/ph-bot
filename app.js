@@ -22,7 +22,7 @@ bot.on('channel_post', async (ctx) => {
     return
   }
 
-  const editedText = replaceAll(regExp, match => {
+  const editedText = text.replaceAll(regExp, match => {
     const newMatch = match.replaceAll(/\s/gmi, "")
     return "Хую" + newMatch.slice(2).toLowerCase()
   })
